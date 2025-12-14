@@ -1,0 +1,5 @@
+id,company_id,deal_type,stage,thesis_tags,score,owner
+1,1,equity,idea,"power,grid",78.5,Analyst
+2,2,equity,diligence,"ev,charging",72.0,Associate
+3,3,credit,ic,"solar,renewable",81.2,VP
+

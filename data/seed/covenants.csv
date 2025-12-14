@@ -1,0 +1,8 @@
+id,deal_id,covenant_type,threshold,test_frequency,next_due_date,source_note
+1,3,Debt/EBITDA,<= 5.0x,Monthly,2025-01-31,"Credit Agreement v1, amended to monthly in v2"
+2,3,Fixed Charge Coverage,>= 1.25x,Quarterly,2025-01-31,"Credit Agreement v1"
+3,3,Minimum Liquidity,">= $12,000,000",Monthly,2025-01-31,"Amended from $10M in v2"
+4,3,Minimum Project DSCR,>= 1.15x,Quarterly,2025-01-31,"Added in Amendment v2"
+5,1,Debt/EBITDA,<= 4.0x,Quarterly,2025-02-15,"GridFlex Credit Agreement"
+6,1,Minimum Liquidity,">= $8,000,000",Monthly,2025-01-31,"GridFlex Credit Agreement"
+

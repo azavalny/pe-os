@@ -1,0 +1,158 @@
+{
+  "source": {
+    "name": "Denham Capital portfolio page",
+    "url": "https://www.denhamcapital.com/portfolio/",
+    "retrieved": "2025-12-14"
+  },
+  "companies": [
+    {
+      "name": "Camino Minerals Corporation",
+      "ticker": "TSXV:COR",
+      "sector": "Mining",
+      "region": "Latin America",
+      "country_focus": ["Peru"],
+      "themes": ["copper", "energy transition"],
+      "projects_assets": ["Maria Cecilia", "Los Chapitos", "Plata Dorada"],
+      "website": "https://www.caminocorp.com/",
+      "denham_portfolio_summary": "Publicly listed copper exploration company with three projects in Peru; acquired the Maria Cecilia copper project from Denham in 2021 and is advancing it alongside Los Chapitos and Plata Dorada to define and develop copper resources supporting the green energy transition."
+    },
+    {
+      "name": "Ceiba Energy",
+      "ticker": null,
+      "sector": "Sustainable Infrastructure",
+      "region": "Latin America",
+      "country_focus": ["Brazil", "Latin America (broader)"],
+      "themes": ["gas-fired generation", "renewables", "LNG-to-power"],
+      "projects_assets": ["Portocem LNG-to-power (Northeast Brazil, licensed up to 2.2 GW)"],
+      "website": "https://www.ceibaenergy.com/",
+      "denham_portfolio_summary": "Seeks to acquire, build, own and operate a portfolio of high-quality power generation assets in Latin America consisting of both gas-fired and renewable projects; developing the Portocem LNG-to-power project in Northeast Brazil licensed up to 2.2 GW."
+    },
+    {
+      "name": "Endeavor Energy",
+      "ticker": null,
+      "sector": "Sustainable Infrastructure",
+      "region": "Africa",
+      "country_focus": ["Sub-Saharan Africa (pipeline)"],
+      "themes": ["power generation", "project development"],
+      "projects_assets": ["450 MW in construction", "1.0 GW pipeline of opportunities"],
+      "website": "https://www.endeavor-energy.com",
+      "denham_portfolio_summary": "Africa-focused independent power generation company with 450 MW of projects in construction (including a project recognized as 'African Power Deal of the Year' at PFI/IJ Global 2016 awards) and an additional ~1.0 GW pipeline across Sub-Saharan Africa."
+    },
+    {
+      "name": "Roam",
+      "ticker": null,
+      "sector": "Sustainable Infrastructure",
+      "region": "Europe",
+      "country_focus": ["United Kingdom"],
+      "themes": ["EV charging", "charging infrastructure software"],
+      "projects_assets": ["Long-dwell EV charging network (target 25,000 chargers)"],
+      "website": "https://www.roamcharging.com/",
+      "denham_portfolio_summary": "UK-based EV charge point owner/operator deploying chargers at hotels, leisure centers, offices, multi-dwelling residential units and other long-dwell destinations; plans to grow network to 25,000 chargers; developed its own back-end and front-end software to manage its network."
+    },
+    {
+      "name": "Greenleaf Power",
+      "ticker": null,
+      "sector": "Sustainable Infrastructure",
+      "region": "North America",
+      "country_focus": ["United States", "North America (broader)"],
+      "themes": ["biomass power", "battery storage"],
+      "projects_assets": ["135 MW dependable generation"],
+      "website": "http://www.greenleaf-power.com",
+      "denham_portfolio_summary": "Biomass power and battery storage development company focused within North America; owns and operates 135 MW of dependable generation fueled by sustainable biomass material; described as a legacy US power investment in Fund VI Continuation and Fund V."
+    },
+    {
+      "name": "INCOA Performance Minerals",
+      "ticker": null,
+      "sector": "Mining",
+      "region": "North America",
+      "country_focus": ["United States", "North America (broader)"],
+      "themes": ["industrial minerals", "ground calcium carbonate"],
+      "projects_assets": ["Fine/ultrafine/treated GCC production"],
+      "website": "https://www.incoa.com/",
+      "denham_portfolio_summary": "Vertically integrated producer of fine, ultrafine and treated ground calcium carbonate for North American markets; GCC used as functional filler across film, fiber, pipe/conduit, construction vinyl profile, paint, sealant/caulk/adhesive and rubber end-products."
+    },
+    {
+      "name": "Pangea Exploration",
+      "ticker": null,
+      "sector": "Mining",
+      "region": "Africa",
+      "country_focus": ["Africa (multi-country)"],
+      "themes": ["mining asset acquisition", "resource projects"],
+      "projects_assets": [],
+      "website": null,
+      "denham_portfolio_summary": "Targets resources throughout Africa and is engaged in the acquisition of mining assets across all stages of the project life cycle."
+    },
+    {
+      "name": "Pembroke Resources",
+      "ticker": null,
+      "sector": "Mining",
+      "region": "Australasia",
+      "country_focus": ["Australia", "Asia-Pacific (broader)"],
+      "themes": ["metallurgical coal", "portfolio development"],
+      "projects_assets": [],
+      "website": "https://www.pembrokeresources.com.au",
+      "denham_portfolio_summary": "Australia-based company focused on the acquisition and development of a portfolio of high-quality metallurgical coal assets in the Asia-Pacific region."
+    },
+    {
+      "name": "Pontal Energy",
+      "ticker": null,
+      "sector": "Sustainable Infrastructure",
+      "region": "Latin America",
+      "country_focus": ["Brazil"],
+      "themes": ["renewables operator/developer", "wind", "solar"],
+      "projects_assets": [
+        "~1 GW renewable capacity managed",
+        "Operational onshore wind: Caetité (~0.1 GW), Itarema (~0.2 GW), Serra da Babilônia 3 (~0.2 GW)",
+        "Under construction: Caetité Norte (~0.2 GW)",
+        "Pipeline: ~0.3 GW wind and solar"
+      ],
+      "website": "https://www.linkedin.com/company/pontalenergy/",
+      "denham_portfolio_summary": "Largest renewable energy operator and developer in Brazil; manages around 1 GW of renewable capacity (enough to power ~750,000 homes) including three operational onshore wind projects, one project in construction and a pipeline of onshore wind and solar."
+    },
+    {
+      "name": "Santiago Metals",
+      "ticker": null,
+      "sector": "Mining",
+      "region": "Latin America",
+      "country_focus": ["Chile"],
+      "themes": ["mining exploration"],
+      "projects_assets": [],
+      "website": "https://santiagometals.cl/en/home/",
+      "denham_portfolio_summary": "Targets mining and exploration projects in Chile."
+    },
+    {
+      "name": "Serra Verde",
+      "ticker": null,
+      "sector": "Mining",
+      "region": "Latin America",
+      "country_focus": ["Brazil"],
+      "themes": ["rare earths", "permanent magnets", "energy transition"],
+      "projects_assets": ["Ionic clay rare earths deposit (Brazil)"],
+      "website": "https://www.serraverde.com/",
+      "denham_portfolio_summary": "Advancing the world's largest known ionic clay rare earths deposit outside of China (Serra Verde) through construction and into production; Brazil-based project contains neodymium, praseodymium, terbium and dysprosium used for wind turbines and EV motors."
+    },
+    {
+      "name": "Virtue Power",
+      "ticker": null,
+      "sector": "Sustainable Infrastructure",
+      "region": "North America",
+      "country_focus": ["United States"],
+      "themes": ["C&I solar", "distributed generation"],
+      "projects_assets": ["800+ MW pipeline (photovoltaic solar)"],
+      "website": "https://www.virtuepower.com/",
+      "denham_portfolio_summary": "Developer/financier/owner-operator of photovoltaic solar projects in the US commercial and industrial sectors; focused on executing an 800+ MW pipeline; positioned to support decarbonization goals and reduce operating costs, with IRA incentives extending runway."
+    },
+    {
+      "name": "Themis",
+      "ticker": null,
+      "sector": "Sustainable Infrastructure",
+      "region": "Africa",
+      "country_focus": ["Côte d'Ivoire", "Madagascar", "Africa (broader)"],
+      "themes": ["renewable power", "hydro"],
+      "projects_assets": ["44 MW hydro (Côte d'Ivoire, in construction)", "200 MW hydro (Madagascar, mid-development)", "~1 GW pipeline"],
+      "website": "https://www.neothemis.com",
+      "denham_portfolio_summary": "Africa-focused independent power generation company focused on renewable power; has a 44 MW hydro project in Côte d'Ivoire in construction, a 200 MW hydro plant in Madagascar in mid-development, and an additional ~1 GW pipeline across Africa."
+    }
+  ]
+}
+
