@@ -19,7 +19,8 @@ with st.sidebar:
     st.markdown("### Tools")
     st.page_link("pages/2_Market_Intel.py", label="Market Intel", icon="📊")
     st.page_link("pages/3_Inbox_Agent.py", label="Reporting Agent", icon="📈")
-    st.page_link("pages/4_Deal_Room.py", label="Deal Library", icon="📁")
+    st.page_link("pages/4_Credit_Deal_Room.py", label="Credit Deal Room", icon="💰")
+    st.page_link("pages/5_Deal_Room.py", label="Deal Library", icon="📁")
     st.markdown("---")
 
 st.title("Deal Library - Document Management & Analysis")
