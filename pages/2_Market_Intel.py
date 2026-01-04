@@ -47,6 +47,12 @@ with col_main1:
     st.subheader("Market Data Search")
     st.markdown("Search for power and energy equity research news relevant to Denham's portfolio companies")
     
+    verticals_filter = st.multiselect(
+        "Verticals",
+        ["Power & Energy", "Healthcare", "Fintech", "Enterprise Software", "SaaS", "Manufacturing", "Industrial"],
+        default=["Power & Energy"]
+    )
+    
     if not settings.openai_api_key:
         st.warning("API key not configured")
     
@@ -62,7 +68,7 @@ with col_main1:
                     company_themes.extend(c["themes"])
             
             with st.spinner("Searching trusted financial sources..."):
-                result = search_portfolio_news(company_list, company_themes)
+                result = search_portfolio_news(company_list, company_themes, verticals_filter)
                 
                 if result.get("error"):
                     st.error(result["error"])
@@ -94,17 +100,17 @@ with col_main1:
 
 with col_main2:
     st.subheader("Investment Discovery")
-    st.markdown("AI-powered company search in energy, renewables, and sustainable infrastructure")
+    st.markdown("AI-powered company search across energy, renewables, healthcare, and other verticals")
     
     thesis_input = st.text_area(
         "Investment Thesis",
-        "Identify high-growth companies in renewable energy and sustainable infrastructure with strong unit economics.",
+        "Identify high-growth companies with strong unit economics and market positioning.",
         height=80
     )
     
     sectors_filter = st.multiselect(
         "Sectors",
-        ["Solar", "Wind", "Energy Storage", "EV Charging", "Grid Infrastructure", "Hydrogen", "Carbon Capture"],
+        ["Solar", "Wind", "Energy Storage", "EV Charging", "Grid Infrastructure", "Hydrogen", "Carbon Capture", "Healthcare Services", "Medical Devices", "Biotech", "Pharmaceuticals", "Healthcare IT", "Fintech", "Enterprise Software", "SaaS", "Manufacturing", "Industrial"],
         default=["Solar", "Energy Storage"]
     )
     

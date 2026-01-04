@@ -2,9 +2,9 @@ from openai import OpenAI
 from pm_os.config import settings
 import json
 
-def search_portfolio_news(company_names: list[str], themes: list[str]) -> dict:
+def search_portfolio_news(company_names: list[str], themes: list[str], verticals: list[str] = None) -> dict:
     """
-    Search for power and energy equity research news relevant to portfolio companies
+    Search for equity research news relevant to portfolio companies
     using OpenAI Responses API with web search.
     """
     if not settings.openai_api_key:
@@ -17,28 +17,40 @@ def search_portfolio_news(company_names: list[str], themes: list[str]) -> dict:
     company_list = ", ".join(company_names[:10])
     theme_list = ", ".join(set(themes[:15]))
     
-    search_query = f"""Look for power and energy equity research news that applies to my thesis and portfolio companies: {company_list}.
+    if verticals is None or len(verticals) == 0:
+        verticals = ["Power & Energy"]
+    
+    verticals_str = ", ".join(verticals)
+    
+    search_query = f"""Look for equity research news in {verticals_str} that applies to my thesis and portfolio companies: {company_list}.
     
 Focus on themes: {theme_list}
 
-IMPORTANT: Focus on rates of change, momentum, and quantitative metrics (YoY/QoQ growth rates, price changes, volume shifts, market share movements, etc.)
+**CRITICAL FORMATTING REQUIREMENTS:**
+- Use standard markdown formatting only (headers, bold, italic, lists, tables)
+- NEVER use backticks (`) or code snippet formatting - use plain text for all content
+- NO LaTeX equations or mathematical notation - use plain text only (e.g., "+25% YoY" not formulas)
+- Keep responses VERY CONCISE: maximum 1-2 sentences per bullet point
+- Focus on rates of change and quantitative metrics (YoY/QoQ growth rates, price changes, volume shifts, market share movements)
+- Be brief and direct - avoid verbose explanations
 
 Please structure your response as follows:
 
 ## Actionable Investment Insights
-[Provide 3-5 key actionable insights with specific rates of change and metrics that impact investment decisions]
+- [1-2 sentences max per insight with specific metrics]
+- [1-2 sentences max per insight with specific metrics]
+- [1-2 sentences max per insight with specific metrics]
 
 ## Summary Table: Themes to Companies
-[Create a table showing which themes apply to which portfolio companies with the most relevant rate-of-change metrics]
+[Concise table showing themes → portfolio companies with key metrics]
 
-## Detailed News Articles
-For each article found:
-1. Provide the title and source
-2. Highlight specific rates of change and quantitative metrics (e.g., "+25% YoY", "declined 15% QoQ")
-3. Explain which portfolio companies this is relevant to and why
-4. Identify the main themes covered
+## Key News Updates
+For each relevant article:
+- **Title/Source:** [Article title] - [Source]
+- **Key Metric:** [1-2 sentences: specific rate of change or quantitative metric]
+- **Portfolio Relevance:** [1-2 sentences: which companies and why]
 
-Focus on quantitative market developments and rate-of-change analysis."""
+Keep all content brief and focused on quantitative market developments."""
     
     try:
         response = client.responses.create(
@@ -57,7 +69,11 @@ Focus on quantitative market developments and rate-of-change analysis."""
                             "www.spglobal.com",
                             "www.energy.gov",
                             "www.iea.org",
-                            "www.woodmac.com"
+                            "www.woodmac.com",
+                            "www.modernhealthcare.com",
+                            "www.statnews.com",
+                            "www.fiercehealthcare.com",
+                            "www.beckershospitalreview.com"
                         ]
                     },
                 }
@@ -106,21 +122,44 @@ def search_investment_opportunities(thesis: str, sectors: list[str], regions: li
 2. Focus on emerging and mid-market companies
 3. Look for recent funding rounds, IPOs, or growth announcements
 4. Score each company 1-10 based on portfolio fit
+5. Format as structured company profiles, NOT news articles
 
-**For EXACTLY 3 COMPANIES, provide:**
+**For EXACTLY 3 COMPANIES, use this EXACT format:**
 
-### [Company Name] - [Sector/Subsector]
-**Portfolio Fit Score: X/10**
+---
 
-- **Location:** [City, Country]
-- **Stage:** [Series A/B/C, IPO, Growth, etc.]
-- **Recent Metrics:** [Specific growth rates: revenue +X% YoY, funding $X million, MW capacity, etc.]
-- **Portfolio Fit Analysis:** [Why this complements existing portfolio - be specific about themes, geography, or capabilities that fill gaps]
-- **Recent News:** [Key developments with dates - funding rounds, project wins, expansions]
-- **Website:** [If available]
+## **COMPANY NAME**
+**Sector:** [Sector/Subsector] | **Portfolio Fit Score: X/10**
+
+**Location:** [City, Country]  
+**Stage:** [Series A/B/C, IPO, Growth, etc.]  
+**Website:** [URL if available]
+
+**Business Description:**
+[2-3 sentence description of what the company does and its core business model]
+
+**Key Metrics:**
+- Revenue Growth: [X% YoY or specific figures]
+- Funding: [$X million in latest round, date]
+- Other relevant metrics: [MW capacity, customer count, market share, etc.]
+
+**Portfolio Fit Analysis:**
+[Why this complements existing portfolio - be specific about themes, geography, or capabilities that fill gaps]
+
+**Recent Developments:**
+- [Date] - [Key development: funding round, project win, expansion, etc.]
+- [Date] - [Additional development]
+
+---
+
+**IMPORTANT FORMATTING:**
+- Use **bold** for company names in headers
+- Present information as structured data, not narrative news style
+- Focus on facts and metrics, not news article prose
+- Each company should be clearly separated with the divider above
 
 **Scoring Criteria (1-10):**
-- Strategic fit with portfolio themes (energy transition, renewables, infrastructure)
+- Strategic fit with portfolio themes and sectors
 - Geographic diversification opportunity
 - Growth momentum and market position
 - Complementary capabilities vs overlap
@@ -129,7 +168,7 @@ Search for companies with:
 - Recent funding/IPO announcements (last 12 months)
 - Revenue growth >30% YoY
 - Operating or expanding in target geographies
-- Clear alignment with energy transition themes"""
+- Clear alignment with investment thesis and sector focus"""
     
     try:
         response = client.responses.create(
@@ -148,7 +187,11 @@ Search for companies with:
                             "www.greentechmedia.com",
                             "www.renewableenergyworld.com",
                             "www.spglobal.com",
-                            "www.woodmac.com"
+                            "www.woodmac.com",
+                            "www.modernhealthcare.com",
+                            "www.statnews.com",
+                            "www.fiercehealthcare.com",
+                            "www.beckershospitalreview.com"
                         ]
                     },
                 }
