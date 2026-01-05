@@ -86,7 +86,8 @@ with col_main1:
         with st.expander("Search Results", expanded=True):
             st.caption("WSJ, Bloomberg, Reuters, Financial Times, CNBC, S&P Global")
             st.markdown("---")
-            st.markdown(result["output"])
+            output_text = result["output"].replace("$", "\\$")
+            st.markdown(output_text)
             
             if result.get("sources"):
                 st.markdown("---")
@@ -151,7 +152,8 @@ with col_main2:
         result_co = st.session_state['company_search_results']
         
         with st.expander("Top Opportunities", expanded=True):
-            st.markdown(result_co["output"])
+            output_text = result_co["output"].replace("$", "\\$")
+            st.markdown(output_text)
             
             if result_co.get("sources"):
                 st.markdown("---")

@@ -91,6 +91,8 @@ Focus on themes: {theme_list}
 - Use standard markdown formatting only (headers, bold, italic, lists, tables)
 - NEVER use backticks (`) or code snippet formatting - use plain text for all content
 - NO LaTeX equations or mathematical notation - use plain text only (e.g., "+25% YoY" not formulas)
+- For dollar amounts, use "USD" prefix or write out "US dollars" instead of "$" symbol (e.g., "1.7 billion USD" or NOT "$1.7 billion")
+- NEVER use standalone "$" symbols as they will be interpreted as LaTeX - always use "USD" or "US dollars" for currency
 - Keep responses VERY CONCISE: maximum 1-2 sentences per bullet point
 - Focus on rates of change and quantitative metrics (YoY/QoQ growth rates, price changes, volume shifts, market share movements)
 - Be brief and direct - avoid verbose explanations
@@ -227,7 +229,7 @@ def search_investment_opportunities(thesis: str, sectors: list[str], regions: li
 
 **Key Metrics:**
 - Revenue Growth: [X% YoY or specific figures]
-- Funding: [$X million in latest round, date]
+- Funding: [USD X million in latest round, date] - use "USD" prefix instead of "$" symbol
 - Other relevant metrics: [MW capacity, customer count, market share, etc.]
 
 **Portfolio Fit Analysis:**
@@ -244,6 +246,7 @@ def search_investment_opportunities(thesis: str, sectors: list[str], regions: li
 - Present information as structured data, not narrative news style
 - Focus on facts and metrics, not news article prose
 - Each company should be clearly separated with the divider above
+- NEVER use "$" symbol - always use "USD" prefix or "US dollars" for currency amounts (e.g., "USD 50 million" NOT "$50 million")
 
 **Scoring Criteria (1-10):**
 - Strategic fit with portfolio themes and sectors
