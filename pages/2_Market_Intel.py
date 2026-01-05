@@ -45,12 +45,12 @@ col_main1, col_main2 = st.columns(2)
 
 with col_main1:
     st.subheader("Market Data Search")
-    st.markdown("Search for power and energy equity research news relevant to Denham's portfolio companies")
+    st.markdown("Search for equity research news relevant to portfolio companies")
     
     verticals_filter = st.multiselect(
         "Verticals",
         ["Power & Energy", "Healthcare", "Fintech", "Enterprise Software", "SaaS", "Manufacturing", "Industrial"],
-        default=["Power & Energy"]
+        default=[]
     )
     
     if not settings.openai_api_key:
@@ -100,7 +100,7 @@ with col_main1:
 
 with col_main2:
     st.subheader("Investment Discovery")
-    st.markdown("AI-powered company search across energy, renewables, healthcare, and other verticals")
+    st.markdown("AI-powered company search across selected sectors and verticals")
     
     thesis_input = st.text_area(
         "Investment Thesis",
@@ -111,7 +111,7 @@ with col_main2:
     sectors_filter = st.multiselect(
         "Sectors",
         ["Solar", "Wind", "Energy Storage", "EV Charging", "Grid Infrastructure", "Hydrogen", "Carbon Capture", "Healthcare Services", "Medical Devices", "Biotech", "Pharmaceuticals", "Healthcare IT", "Fintech", "Enterprise Software", "SaaS", "Manufacturing", "Industrial"],
-        default=["Solar", "Energy Storage"]
+        default=[]
     )
     
     regions_filter = st.multiselect(
