@@ -7,4 +7,5 @@ python-dotenv>=1.0
 rapidfuzz>=3.9
 scikit-learn>=1.4
 openai>=1.0
+pypdf>=4.0
 

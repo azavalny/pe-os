@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(page_title="Credit Deal Room - Private Markets OS", layout="wide", page_icon="💰")
+st.set_page_config(page_title="Credit Origination - Private Markets OS", layout="wide", page_icon="💰")
 
 st.markdown("""
 <style>
@@ -16,11 +16,73 @@ with st.sidebar:
     st.markdown("### Tools")
     st.page_link("pages/2_Market_Intel.py", label="Market Intel", icon="📊")
     st.page_link("pages/3_Inbox_Agent.py", label="Reporting Agent", icon="📈")
-    st.page_link("pages/4_Credit_Deal_Room.py", label="Credit Deal Room", icon="💰")
-    st.page_link("pages/5_Deal_Room.py", label="Deal Library", icon="📁")
+    st.page_link("pages/4_Credit_Deal_Room.py", label="Credit Origination", icon="💰")
+    st.page_link("pages/5_Deal_Room.py", label="Deal Detective", icon="📁")
     st.markdown("---")
 
-st.title("Credit Deal Room - Document Analysis & Monitoring")
+st.title("Credit Origination - Document Analysis & Monitoring")
+
+st.markdown("---")
+
+with st.expander("📤 Upload Credit Agreement or Amendment", expanded=False):
+    uploaded_credit_file = st.file_uploader(
+        "Upload PDF document (credit agreement, amendment, term sheet)",
+        type=['pdf'],
+        key="credit_doc_upload",
+        help="Upload a credit agreement to extract covenants, terms, and amendments"
+    )
+    
+    if uploaded_credit_file is not None:
+        if st.button("Process Credit Document", type="primary", key="process_credit_doc"):
+            with st.spinner("Extracting text from PDF..."):
+                try:
+                    from pm_os.services.document_parser import extract_text_from_pdf, parse_credit_agreement
+                    
+                    extracted_text = extract_text_from_pdf(uploaded_credit_file)
+                    st.success(f"✓ Extracted {len(extracted_text)} characters from {uploaded_credit_file.name}")
+                    
+                    with st.spinner("Parsing credit agreement with AI..."):
+                        parsed_data = parse_credit_agreement(extracted_text)
+                        
+                        if "error" in parsed_data:
+                            st.error(parsed_data["error"])
+                        else:
+                            st.session_state['uploaded_credit_doc'] = {
+                                'filename': uploaded_credit_file.name,
+                                'text': extracted_text,
+                                'covenants': parsed_data.get('covenants', []),
+                                'terms': parsed_data.get('financial_terms', {}),
+                                'amendments': parsed_data.get('amendments', [])
+                            }
+                            
+                            st.success("✓ Credit document parsed successfully!")
+                            
+                            if parsed_data.get('covenants'):
+                                st.markdown("**Extracted Covenants:**")
+                                for cov in parsed_data['covenants'][:3]:
+                                    st.markdown(f"- {cov.get('type', 'N/A')}: {cov.get('threshold', 'N/A')}")
+                                if len(parsed_data['covenants']) > 3:
+                                    st.caption(f"+{len(parsed_data['covenants']) - 3} more covenants")
+                            
+                            if parsed_data.get('financial_terms'):
+                                st.markdown("**Financial Terms:**")
+                                terms = parsed_data['financial_terms']
+                                if terms.get('facility_size'):
+                                    st.markdown(f"- Facility Size: {terms['facility_size']}")
+                                if terms.get('interest_rate'):
+                                    st.markdown(f"- Interest Rate: {terms['interest_rate']}")
+                            
+                            st.rerun()
+                            
+                except Exception as e:
+                    st.error(f"Error processing document: {str(e)}")
+
+if st.session_state.get('uploaded_credit_doc'):
+    doc_info = st.session_state['uploaded_credit_doc']
+    st.info(f"📄 Uploaded: {doc_info['filename']} | {len(doc_info.get('covenants', []))} covenants | {len(doc_info.get('amendments', []))} amendments")
+    if st.button("Clear Uploaded Document", key="clear_credit_upload"):
+        del st.session_state['uploaded_credit_doc']
+        st.rerun()
 
 st.markdown("---")
 
@@ -48,12 +110,22 @@ with credit_tabs[2]:
     if st.button("Generate IC Memo Draft", type="primary", key="generate_memo", use_container_width=True):
         with st.spinner("Analyzing credit documents and generating memo..."):
             st.markdown("---")
-            st.success("IC Memo draft generated!")
+            
+            uploaded_doc_note = ""
+            if st.session_state.get('uploaded_credit_doc'):
+                uploaded_doc_note = f" (including uploaded document: {st.session_state['uploaded_credit_doc']['filename']})"
+            
+            st.success(f"IC Memo draft generated{uploaded_doc_note}!")
             
             st.markdown("# Investment Committee Memorandum")
             st.markdown(f"**Deal:** {memo_deal}")
             st.markdown(f"**Date:** December 14, 2024")
             st.markdown(f"**Analysis Lens:** {memo_lens}")
+            
+            if st.session_state.get('uploaded_credit_doc'):
+                terms = st.session_state['uploaded_credit_doc'].get('terms', {})
+                if any(terms.values()):
+                    st.markdown("**Source Documents:** Uploaded credit agreement + " + st.session_state['uploaded_credit_doc']['filename'])
             
             st.markdown("---")
             
@@ -348,22 +420,54 @@ with credit_tabs[1]:
     st.caption("Identify meaningful changes and risk implications between document versions")
     
     col_comp1, col_comp2 = st.columns(2)
+    
+    doc_options = ["Credit Agreement v1.0 - GridPower (June 2023)", "Credit Agreement v1.0 - SolarFlex (March 2024)"]
+    amended_options = ["Credit Agreement v2.0 - GridPower (Amendment #1, Nov 2024)", "Credit Agreement v2.0 - SolarFlex (Amendment #1, Sept 2024)"]
+    
+    if st.session_state.get('uploaded_credit_doc'):
+        uploaded_name = f"📎 {st.session_state['uploaded_credit_doc']['filename']} (Uploaded)"
+        doc_options.append(uploaded_name)
+        amended_options.append(uploaded_name)
+    
     with col_comp1:
         comp_doc1 = st.selectbox(
             "Original Document",
-            ["Credit Agreement v1.0 - GridPower (June 2023)", "Credit Agreement v1.0 - SolarFlex (March 2024)"],
+            doc_options,
             key="comp_doc1"
         )
     with col_comp2:
         comp_doc2 = st.selectbox(
             "Amended Document",
-            ["Credit Agreement v2.0 - GridPower (Amendment #1, Nov 2024)", "Credit Agreement v2.0 - SolarFlex (Amendment #1, Sept 2024)"],
+            amended_options,
             key="comp_doc2"
         )
     
     if st.button("Compare Documents", type="primary", key="compare_credit_docs", use_container_width=True):
         with st.spinner("Performing section-aware comparison..."):
             st.markdown("---")
+            
+            if st.session_state.get('uploaded_credit_doc'):
+                amendments = st.session_state['uploaded_credit_doc'].get('amendments', [])
+                if amendments and ("📎" in comp_doc1 or "📎" in comp_doc2):
+                    st.success(f"Comparison complete - {len(amendments)} changes identified from uploaded document")
+                    st.markdown("### Changes from Uploaded Document")
+                    
+                    for idx, amendment in enumerate(amendments, 1):
+                        impact = amendment.get('impact', 'neutral').lower()
+                        if impact == 'adverse':
+                            icon = "🔴"
+                        elif impact == 'favorable':
+                            icon = "🟢"
+                        else:
+                            icon = "🟡"
+                        
+                        with st.container(border=True):
+                            st.markdown(f"**{icon} Change #{idx}: {amendment.get('section', 'N/A')}**")
+                            st.markdown(amendment.get('change_description', 'No description'))
+                            st.markdown(f"**Impact:** {impact.title()}")
+                    
+                    st.markdown("---")
+            
             st.success("Comparison complete - 8 changes identified")
             
             st.markdown("### What Changed")
@@ -551,6 +655,35 @@ with credit_tabs[0]:
     )
     
     st.markdown("---")
+    
+    if st.session_state.get('uploaded_credit_doc'):
+        uploaded_covenants = st.session_state['uploaded_credit_doc'].get('covenants', [])
+        if uploaded_covenants:
+            st.success(f"✓ Showing {len(uploaded_covenants)} covenant(s) from uploaded document: {st.session_state['uploaded_credit_doc']['filename']}")
+            st.markdown("### Uploaded Document Covenants")
+            
+            covenant_table_data = {
+                "Covenant": [],
+                "Threshold": [],
+                "Test Frequency": [],
+                "Cure Period": [],
+                "Section": []
+            }
+            
+            for cov in uploaded_covenants:
+                covenant_table_data["Covenant"].append(cov.get('type', 'N/A'))
+                covenant_table_data["Threshold"].append(cov.get('threshold', 'N/A'))
+                covenant_table_data["Test Frequency"].append(cov.get('test_frequency', 'N/A'))
+                covenant_table_data["Cure Period"].append(cov.get('cure_period', 'N/A'))
+                covenant_table_data["Section"].append(cov.get('section', 'N/A'))
+            
+            import pandas as pd
+            df_uploaded_covenants = pd.DataFrame(covenant_table_data)
+            st.dataframe(df_uploaded_covenants, use_container_width=True, hide_index=True)
+            
+            st.caption(f"*Extracted from {st.session_state['uploaded_credit_doc']['filename']} using AI*")
+            st.markdown("---")
+    
     st.markdown("### Covenant Summary Table")
     
     if "GridPower" in deal_select:

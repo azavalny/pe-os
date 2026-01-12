@@ -4,7 +4,7 @@ from pm_os.models import Document, Covenant
 from pm_os.services.docqa import generate_ic_memo_outline, answer_question
 from pm_os.services.compare import compare_docs, similarity
 
-st.set_page_config(page_title="Deal Library - Private Markets OS", layout="wide", page_icon="📁")
+st.set_page_config(page_title="Deal Detective - Private Markets OS", layout="wide", page_icon="📁")
 
 st.markdown("""
 <style>
@@ -19,11 +19,11 @@ with st.sidebar:
     st.markdown("### Tools")
     st.page_link("pages/2_Market_Intel.py", label="Market Intel", icon="📊")
     st.page_link("pages/3_Inbox_Agent.py", label="Reporting Agent", icon="📈")
-    st.page_link("pages/4_Credit_Deal_Room.py", label="Credit Deal Room", icon="💰")
-    st.page_link("pages/5_Deal_Room.py", label="Deal Library", icon="📁")
+    st.page_link("pages/4_Credit_Deal_Room.py", label="Credit Origination", icon="💰")
+    st.page_link("pages/5_Deal_Room.py", label="Deal Detective", icon="📁")
     st.markdown("---")
 
-st.title("Deal Library - Document Management & Analysis")
+st.title("Deal Detective - Document Management & Analysis")
 
 st.markdown("---")
 
@@ -102,7 +102,73 @@ with col2:
 
 st.markdown("---")
 
+with st.expander("📤 Upload New Document", expanded=False):
+    uploaded_deal_file = st.file_uploader(
+        f"Upload PDF document for {selected_company}",
+        type=['pdf'],
+        key="deal_doc_upload",
+        help="Upload a CIM, IC memo, financial report, or other deal document"
+    )
+    
+    if uploaded_deal_file is not None:
+        if st.button("Process Deal Document", type="primary", key="process_deal_doc"):
+            with st.spinner("Extracting text from PDF..."):
+                try:
+                    from pm_os.services.document_parser import extract_text_from_pdf, parse_deal_document
+                    
+                    extracted_text = extract_text_from_pdf(uploaded_deal_file)
+                    st.success(f"✓ Extracted {len(extracted_text)} characters from {uploaded_deal_file.name}")
+                    
+                    with st.spinner("Parsing deal document with AI..."):
+                        parsed_data = parse_deal_document(extracted_text)
+                        
+                        if "error" in parsed_data:
+                            st.error(parsed_data["error"])
+                        else:
+                            if 'uploaded_deal_docs' not in st.session_state:
+                                st.session_state['uploaded_deal_docs'] = {}
+                            
+                            if selected_company not in st.session_state['uploaded_deal_docs']:
+                                st.session_state['uploaded_deal_docs'][selected_company] = []
+                            
+                            st.session_state['uploaded_deal_docs'][selected_company].append({
+                                'name': uploaded_deal_file.name,
+                                'uploaded': "2024-12-14",
+                                'extracted_tables': parsed_data.get('extracted_tables', []),
+                                'extracted_data': [f"{k}: {v}" for k, v in parsed_data.get('financial_data', {}).items() if v],
+                                'tags': parsed_data.get('tags', []),
+                                'text': extracted_text,
+                                'parsed_data': parsed_data
+                            })
+                            
+                            st.success("✓ Document parsed and added to library!")
+                            
+                            if parsed_data.get('deal_summary'):
+                                st.markdown("**Deal Summary:**")
+                                summary = parsed_data['deal_summary']
+                                if summary.get('company_name'):
+                                    st.markdown(f"- Company: {summary['company_name']}")
+                                if summary.get('sector'):
+                                    st.markdown(f"- Sector: {summary['sector']}")
+                            
+                            if parsed_data.get('tags'):
+                                st.markdown(f"**Tags:** {', '.join(parsed_data['tags'][:5])}")
+                            
+                            st.rerun()
+                            
+                except Exception as e:
+                    st.error(f"Error processing document: {str(e)}")
+
+if st.session_state.get('uploaded_deal_docs', {}).get(selected_company):
+    uploaded_count = len(st.session_state['uploaded_deal_docs'][selected_company])
+    st.info(f"📄 {uploaded_count} uploaded document(s) for {selected_company}")
+
+st.markdown("---")
+
 documents = mock_documents.get(selected_company, [])
+
+if st.session_state.get('uploaded_deal_docs', {}).get(selected_company):
+    documents = documents + st.session_state['uploaded_deal_docs'][selected_company]
 
 if view_mode == "Documents":
     st.markdown(f"### Documents")
@@ -169,7 +235,13 @@ if 'selected_doc' in st.session_state and 'action' in st.session_state:
         
         if st.button("Answer Question", type="primary"):
             st.markdown("### Answer")
-            st.info("Based on the CIM, Roam is the UK's leading long-dwell EV charging network operator with a target of 25,000 chargers. Key investment highlights include: (1) Strong unit economics with average utilization rates improving to 24%, (2) Proprietary software platform providing operational efficiency, (3) Strategic partnerships with major hospitality and residential property owners, (4) Favorable UK policy environment with government EV adoption targets.")
+            
+            if doc.get('text'):
+                from pm_os.services.docqa import answer_question
+                answer = answer_question(doc['text'], q)
+                st.info(answer)
+            else:
+                st.info("Based on the CIM, Roam is the UK's leading long-dwell EV charging network operator with a target of 25,000 chargers. Key investment highlights include: (1) Strong unit economics with average utilization rates improving to 24%, (2) Proprietary software platform providing operational efficiency, (3) Strategic partnerships with major hospitality and residential property owners, (4) Favorable UK policy environment with government EV adoption targets.")
     
     with tabs[1]:
         st.subheader("IC Memo Generator")

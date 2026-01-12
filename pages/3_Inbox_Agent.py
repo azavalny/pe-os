@@ -20,12 +20,66 @@ with st.sidebar:
     st.markdown("### Tools")
     st.page_link("pages/2_Market_Intel.py", label="Market Intel", icon="📊")
     st.page_link("pages/3_Inbox_Agent.py", label="Reporting Agent", icon="📈")
-    st.page_link("pages/4_Credit_Deal_Room.py", label="Credit Deal Room", icon="💰")
-    st.page_link("pages/5_Deal_Room.py", label="Deal Library", icon="📁")
+    st.page_link("pages/4_Credit_Deal_Room.py", label="Credit Origination", icon="💰")
+    st.page_link("pages/5_Deal_Room.py", label="Deal Detective", icon="📁")
     st.markdown("---")
 
 st.title("Reporting Agent - Portfolio & Investor Updates")
 st.subheader("Automated portfolio reporting and investor communication")
+
+st.markdown("---")
+
+with st.expander("📤 Upload Portfolio Report or Financial Document", expanded=False):
+    uploaded_portfolio_file = st.file_uploader(
+        "Upload PDF document (portfolio report, quarterly update, financial statement)",
+        type=['pdf'],
+        key="portfolio_doc_upload",
+        help="Upload a portfolio report to extract company performance metrics"
+    )
+    
+    if uploaded_portfolio_file is not None:
+        if st.button("Process Document", type="primary", key="process_portfolio_doc"):
+            with st.spinner("Extracting text from PDF..."):
+                try:
+                    from pm_os.services.document_parser import extract_text_from_pdf, parse_portfolio_report
+                    
+                    extracted_text = extract_text_from_pdf(uploaded_portfolio_file)
+                    st.success(f"✓ Extracted {len(extracted_text)} characters from {uploaded_portfolio_file.name}")
+                    
+                    with st.spinner("Parsing portfolio metrics with AI..."):
+                        parsed_data = parse_portfolio_report(extracted_text)
+                        
+                        if "error" in parsed_data:
+                            st.error(parsed_data["error"])
+                        else:
+                            if 'uploaded_portfolio_docs' not in st.session_state:
+                                st.session_state['uploaded_portfolio_docs'] = []
+                            
+                            st.session_state['uploaded_portfolio_docs'].append({
+                                'filename': uploaded_portfolio_file.name,
+                                'text': extracted_text,
+                                'parsed_data': parsed_data
+                            })
+                            
+                            st.success("✓ Document parsed successfully!")
+                            
+                            if parsed_data.get('companies'):
+                                st.markdown("**Extracted Companies:**")
+                                for company in parsed_data['companies'][:3]:
+                                    st.markdown(f"- {company.get('company', 'N/A')} - {company.get('sector', 'N/A')}")
+                                if len(parsed_data['companies']) > 3:
+                                    st.caption(f"+{len(parsed_data['companies']) - 3} more companies")
+                            
+                            st.rerun()
+                            
+                except Exception as e:
+                    st.error(f"Error processing document: {str(e)}")
+
+if st.session_state.get('uploaded_portfolio_docs'):
+    st.info(f"📄 {len(st.session_state['uploaded_portfolio_docs'])} uploaded document(s) available")
+    if st.button("Clear Uploaded Documents", key="clear_portfolio_uploads"):
+        st.session_state['uploaded_portfolio_docs'] = []
+        st.rerun()
 
 st.markdown("---")
 
@@ -97,6 +151,25 @@ with col_report1:
             "status": "Development"
         }
     ]
+    
+    if st.session_state.get('uploaded_portfolio_docs'):
+        for doc in st.session_state['uploaded_portfolio_docs']:
+            parsed_data = doc.get('parsed_data', {})
+            if parsed_data.get('companies'):
+                for company_data in parsed_data['companies']:
+                    if company_data.get('company'):
+                        portfolio_mtm.append({
+                            "company": company_data.get('company', 'Unknown'),
+                            "sector": company_data.get('sector', 'N/A'),
+                            "investment_date": company_data.get('investment_date', 'N/A'),
+                            "invested_capital": company_data.get('invested_capital', 0),
+                            "current_value": company_data.get('current_value', 0),
+                            "moic": company_data.get('moic', 0),
+                            "irr": company_data.get('irr', 'N/A'),
+                            "ebitda_ltm": company_data.get('ebitda_ltm', 0),
+                            "revenue_growth_yoy": company_data.get('revenue_growth_yoy', 'N/A'),
+                            "status": company_data.get('status', 'N/A')
+                        })
     
     st.markdown("**Q4 2024 Portfolio Summary**")
     st.caption("As of December 14, 2024")

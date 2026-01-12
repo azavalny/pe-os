@@ -35,8 +35,8 @@ with st.sidebar:
     st.markdown("### Tools")
     st.page_link("pages/2_Market_Intel.py", label="Market Intel", icon="📊")
     st.page_link("pages/3_Inbox_Agent.py", label="Reporting Agent", icon="📈")
-    st.page_link("pages/4_Credit_Deal_Room.py", label="Credit Deal Room", icon="💰")
-    st.page_link("pages/5_Deal_Room.py", label="Deal Library", icon="📁")
+    st.page_link("pages/4_Credit_Deal_Room.py", label="Credit Origination", icon="💰")
+    st.page_link("pages/5_Deal_Room.py", label="Deal Detective", icon="📁")
     st.markdown("---")
 
 st.title(f"{settings.firm_name}")
@@ -63,7 +63,7 @@ with tab1:
 with tab2:
     st.header("Credit Origination")
     st.markdown("""
-    **Deal Library & Document Management**
+    **Deal Detective & Document Management**
     - Document Q&A with AI-powered search
     - IC memo generation and outline creation
     - Document version comparison
@@ -77,7 +77,7 @@ with tab2:
     
     col_credit1, col_credit2 = st.columns(2)
     with col_credit1:
-        if st.button("Open Credit Deal Room", type="primary"):
+        if st.button("Open Credit Origination", type="primary"):
             st.switch_page("pages/4_Credit_Deal_Room.py")
         
 with tab3:
